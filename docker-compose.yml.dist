@@ -1,0 +1,54 @@
+version: '3.5'
+
+services:
+    order-app-nginx:
+        container_name: order-app-nginx
+        build:
+            context: ./docker/nginx
+            args:
+                UID: $U_ID
+        ports:
+            - 1100:80
+        volumes:
+            - ./public:/application/www/public
+        depends_on:
+            - order-app-code
+        networks:
+            - order-app-network
+
+    order-app-code:
+        container_name: order-app-code
+        build:
+            context: ./docker/php
+            args:
+                UID: $U_ID
+        volumes:
+            - ./:/application/www
+        env_file:
+            - .env
+        depends_on:
+            - order-app-db
+        networks:
+            - order-app-network
+
+    order-app-db:
+        container_name: order-app-db
+        build:
+            context: docker/database
+        ports:
+            - 3360:3306
+        environment:
+            MYSQL_DATABASE: order_app_database
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - order-app-db-data:/var/lib/mysql
+        networks:
+            - order-app-network
+        command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
+
+volumes:
+    order-app-db-data:
+
+networks:
+    order-app-network:
+        external: true

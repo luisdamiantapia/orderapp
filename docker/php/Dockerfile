@@ -3,8 +3,6 @@ FROM php:7.4.13-fpm
 ARG UID
 
 # Create user and some useful stuff
-#RUN adduser -u ${UID} --disabled-password --gecos "" appuser
-
 RUN adduser appuser
 RUN usermod -aG sudo appuser
 
@@ -18,9 +16,10 @@ RUN echo "alias sf=/application/www/bin/console" >> /home/appuser/.bashrc
 RUN apt-get update \
     && apt-get install -y git acl openssl openssh-client wget zip vim librabbitmq-dev libssh-dev \
     && apt-get install -y libpng-dev zlib1g-dev libzip-dev libxml2-dev libicu-dev \
-    && docker-php-ext-install intl pdo pdo_mysql zip gd soap bcmath sockets
+    && docker-php-ext-install intl pdo pdo_mysql zip gd soap bcmath sockets opcache \
     #&& pecl install xdebug amqp \
     #&& docker-php-ext-enable --ini-name 05-opcache.ini opcache xdebug amqp
+    && docker-php-ext-enable --ini-name 05-opcache.ini opcache
 
 # Install and update composer
 RUN curl https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer

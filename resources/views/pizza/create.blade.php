@@ -17,6 +17,17 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Pizza</div>
+
+                    @if(count($errors)>0)
+                        <div class="alert alert-danger">
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                        </div>
+                    @endif
+
+                    <form   action="{{ route('pizza.store') }}" method="post">
+                        @csrf
                     <div class="card-body">
                         <div class="form-group">
                             <label for="Name">Nombre de la pizza</label>
@@ -28,9 +39,9 @@
                         </div>
                         <div class="form-inline">
                             <label>Precio ($)</label>
-                            <input type="number" class="form-control" placeholder="Pizza chica">
-                            <input type="number" class="form-control" placeholder="Pizza mediana">
-                            <input type="number" class="form-control" placeholder="Pizza grande">
+                            <input type="number" name="small_price" class="form-control" placeholder="Pizza chica">
+                            <input type="number" name="medium_price" class="form-control" placeholder="Pizza mediana">
+                            <input type="number" name="large_price" class="form-control" placeholder="Pizza grande">
                         </div>
                         <div class="form-group">
                             <label for="category">Categoría</label>
@@ -43,15 +54,17 @@
                         </div>
                         <div class="form-group">
                             <label for="image">Imagen</label>
-                            <input type="file" class="form-control" name="image">
+                            <input type="file" name="image" class="form-control">
                         </div>
                         <div class="form-group text-center">
                             <br>
                             <br>
                             <button class="btn btn-primary" type="submit">Guardar</button>
                         </div>
-
                     </div>
+
+                </form>
+
                 </div>
             </div>
         </div>

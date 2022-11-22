@@ -5,8 +5,12 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Listado</div>
-
+                    <div class="card-header">
+                        Listado
+                        <a href="{{ route('pizza.create') }}">
+                            <button class="btn btn-success" style="float: right;">Agregar Pizza</button>
+                        </a>
+                    </div>
                     <div class="card-body">
                         @if (session('message'))
                             <div class="alert alert-success" role="alert">
@@ -44,9 +48,11 @@
                                     </td>
 
                                     <td>
-                                        <a href="#">
-                                            <button class="btn btn-danger">Eliminar</button>
-                                        </a>
+                                        <form action="{{ route('pizza.destroy', $pizza->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger" type="submit">Eliminar</button>
+                                        </form>
                                     </td>
 
 
@@ -54,6 +60,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $pizzas->links() }}
                     </div>
                 </div>
             </div>
